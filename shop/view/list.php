@@ -3,6 +3,7 @@
     <a href="index.php?page=deleteStore&id=<?php echo $store->getId() ?>"
         onclick="return confirm('Ban chac chan muon xoa khong')" class="btn btn-danger">Delete</a></h1>
 <br />
+<?php include_once 'sortBy.php'; ?>
 
 <div class="row row-cols-1 row-cols-md-4">
     <?php foreach($list as $value){ ?>
@@ -26,5 +27,4 @@
         </div>
     </div>
     <?php } ?>
-
 </div>

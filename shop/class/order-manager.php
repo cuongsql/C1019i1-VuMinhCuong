@@ -15,8 +15,13 @@ class OderManager
 
     public function index()
     {
+        $sortBy = "name ASC";
+
+        if ($_SERVER['REQUEST_METHOD'] == "POST") {
+            $sortBy = $_POST["sortBy"];
+        }
         $storeId = isset($_GET['store']) ? $_GET['store'] : 2 ;
-        $list = $this->productDB->getIndex($storeId);
+        $list = $this->productDB->getIndex($storeId, $sortBy);
         $store = $this->productDB->getValueStore($storeId);
         include_once 'view/list.php';
     }

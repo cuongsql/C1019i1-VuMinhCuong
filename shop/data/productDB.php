@@ -7,11 +7,11 @@ class ProductDB
         $this->conn = $connect;
     }
 
-    public function getIndex($id)
+    public function getIndex($id, $sortBy)
     {
         $sql = "SELECT * FROM products p
         INNER JOIN storeProducts s ON p.id = s.product_id
-        WHERE s.shop_id = $id";
+        WHERE s.shop_id = $id ORDER BY $sortBy";
         $stmt = $this->conn->query($sql);
         $result = $stmt->fetchAll();
         $arr = [];
@@ -147,6 +147,7 @@ class ProductDB
         $stmt = $this->conn->query($sql);
         $result = $stmt->fetchAll();
         $product = new Product($result[0]['name'],$result[0]['price'],$result[0]['toppings']);
+        $product->setId($result[0]['id']);
         return $product;
     }
 
