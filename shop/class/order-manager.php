@@ -15,7 +15,7 @@ class OderManager
 
     public function index()
     {
-        $storeId = $_GET['store'];
+        $storeId = isset($_GET['store']) ? $_GET['store'] : 2 ;
         $list = $this->productDB->getIndex($storeId);
         $store = $this->productDB->getValueStore($storeId);
         include_once 'view/list.php';
