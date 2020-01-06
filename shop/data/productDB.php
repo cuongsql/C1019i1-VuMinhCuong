@@ -83,17 +83,20 @@ class ProductDB
         $this->chooseAddStore($store_id, $product_id);
     }
 
-    public function getEditProduct($editProduct, $product_id)
+    public function getEditProduct($editProduct, $storeProduct, $editStore)
     {
         $name = $editProduct->getName();
         $price = $editProduct->getPrice();
         $toppings = $editProduct->getToppings();
+        $product_id = $storeProduct->getProduct_id();
 
         $sql = "UPDATE products 
                 SET `name` = ?, price = ?, toppings = ?
                 WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute([$name, $price, $toppings, $product_id]);
+
+        $this->chooseEditStore($storeProduct, $editStore);
     }
 
     public function getDeleteProduct($id)
@@ -113,13 +116,19 @@ class ProductDB
         $stmt->execute();
     }
 
-    public function chooseEditStore($store_id,$product_id, $id)
+    public function chooseEditStore($storeProduct, $editStore)
     {
+        $storeProduct_id = $storeProduct->getId();
+        $product_id = $storeProduct->getProduct_id();
+
         $sql = "UPDATE `storeProducts` 
                 SET `shop_id` = ?, `product_id` = ? 
                 WHERE `id` = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$store_id, $product_id, $id]);
+        $stmt->bindParam(1,$editStore);
+        $stmt->bindParam(2,$product_id);
+        $stmt->bindParam(3,$storeProduct_id);
+        $stmt->execute();
     }
     
     public function getValueStore($id)
@@ -139,6 +148,16 @@ class ProductDB
         $result = $stmt->fetchAll();
         $product = new Product($result[0]['name'],$result[0]['price'],$result[0]['toppings']);
         return $product;
+    }
+
+    public function getValueStoreProduct($product_id)
+    {
+        $sql = "SELECT * FROM storeProducts WHERE product_id = $product_id";
+        $stmt = $this->conn->query($sql);
+        $result = $stmt->fetchAll();
+        $storeProduct = new StoreProduct($result[0]['shop_id'],$result[0]['product_id']);
+        $storeProduct->setId($result[0]['id']);
+        return $storeProduct;
     }
 
 }

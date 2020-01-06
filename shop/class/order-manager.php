@@ -42,15 +42,17 @@ class OderManager
         $productId = $_GET['id'];
         $product = $this->productDB->getValueProduct($productId);
         $showStore = $this->productDB->getStore();
-        // var_dump($showStore);
+        $storeProduct = $this->productDB->getValueStoreProduct($productId);
+        
 
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $name = $_POST["name"];
             $price = $_POST["price"];
             $toppings = $_POST["toppings"];
+            $editStore = $_POST['editStore'];
             $editProduct = new Product($name, $price, $toppings);
 
-            $this->productDB->getEditProduct($editProduct, $productId);
+            $this->productDB->getEditProduct($editProduct, $storeProduct, $editStore);
             header('Location: index.php');
         }
         include "view/product/edit.php";
@@ -78,7 +80,6 @@ class OderManager
     {
         $storeId = $_GET['id'];
         $store = $this->productDB->getValueStore($storeId);
-
         if ($_SERVER['REQUEST_METHOD'] == "POST") {
             $nameStore = $_POST["nameStore"];
             $editStore = new Store($nameStore);

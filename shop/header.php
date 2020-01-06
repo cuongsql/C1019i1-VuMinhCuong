@@ -1,6 +1,7 @@
 <?php
 include_once 'class/product.php';
 include_once 'class/store.php';
+include_once 'class/storeProduct.php';
 include_once 'data/DBConnect.php';
 include_once 'data/productDB.php';
 include_once 'class/order-manager.php';
