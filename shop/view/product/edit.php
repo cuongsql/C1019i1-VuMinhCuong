@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-12">
             <h1>Edit Product</h1>
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <div class="form-group">
                     <label>Name</label>
                     <input type="text" class="form-control" name="name" value="<?php echo $product->getName() ?>">
@@ -15,6 +15,10 @@
                     <label>Topping</label>
                     <input type="text" class="form-control" name="toppings"
                         value="<?php echo $product->getToppings() ?>">
+                </div>
+                <div class="form-group">
+                    <label><img onClick="triggerClick()" id="Display" src="view/images/<?php echo $product->getAvatar() ?>" class="img-thumbnail avatar" alt="<?php echo $product->getName() ?>"></label>
+                    <input type="file" class="form-control" onChange="displayImage(this)" id="idImage" name="avatar">
                 </div>
                 <div class="form-group">
                     <label>Store</label>
@@ -32,3 +36,19 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+function triggerClick(e) {
+    document.querySelector('#idImage').click();
+}
+
+function displayImage(e) {
+    if (e.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            document.querySelector('#Display').setAttribute('src', e.target.result);
+        }
+        reader.readAsDataURL(e.files[0]);
+    }
+}
+</script>

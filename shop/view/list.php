@@ -9,7 +9,7 @@
     <?php foreach($list as $value){ ?>
     <div class="col">
         <div class="card text-white bg-dark mb-3">
-            <img src="https://vnn-imgs-f.vgcloud.vn/2019/10/06/08/tra-sua.jpg" class="card-img-top" alt="...">
+            <img src="view/images/<?php echo $value->getAvatar() ?>" class="card-img-top avatar" alt="<?php echo $value->getName() ?>">
             <div class="card-body">
                 <h5><small>MT-<?php echo $value->getId() ?></small></h5>
                 <h4 class="card-title"><?php echo $value->getName() ?></h4>

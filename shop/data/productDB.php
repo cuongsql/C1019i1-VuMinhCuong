@@ -11,7 +11,7 @@ class ProductDB
     {
         $sql = "SELECT * FROM products p
         INNER JOIN storeProducts s ON p.id = s.product_id
-        WHERE s.shop_id = $id ORDER BY $sortBy";
+        WHERE s.shop_id = $id $sortBy";
         $stmt = $this->conn->query($sql);
         $result = $stmt->fetchAll();
         $arr = [];
@@ -19,7 +19,8 @@ class ProductDB
         foreach($result as $item){
             $lists = new Product($item['name'],
                                  $item['price'],
-                                 $item['toppings']
+                                 $item['toppings'],
+                                 $item['avatar']
                                 );
             array_push($arr, $lists);
             $lists->setId($item['product_id']);
@@ -71,12 +72,13 @@ class ProductDB
 
     public function getAddProduct($product, $store_id)
     {
-        $sql = "INSERT INTO products (id, `name`, price, toppings) 
-                VALUE (null, ?, ?, ?)";
+        $sql = "INSERT INTO products (id, `name`, price, toppings, avatar) 
+                VALUE (null, ?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bindParam(1,$product->getName());
         $stmt->bindParam(2,$product->getPrice());
         $stmt->bindParam(3,$product->getToppings());
+        $stmt->bindParam(4,$product->getAvatar());
         $stmt->execute();
         
         $product_id = $this->conn->lastInsertId();
@@ -88,13 +90,14 @@ class ProductDB
         $name = $editProduct->getName();
         $price = $editProduct->getPrice();
         $toppings = $editProduct->getToppings();
+        $avatar = $editProduct->getAvatar();
         $product_id = $storeProduct->getProduct_id();
 
         $sql = "UPDATE products 
-                SET `name` = ?, price = ?, toppings = ?
+                SET `name` = ?, price = ?, toppings = ?, avatar = ?
                 WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->execute([$name, $price, $toppings, $product_id]);
+        $stmt->execute([$name, $price, $toppings, $avatar, $product_id]);
 
         $this->chooseEditStore($storeProduct, $editStore);
     }
@@ -146,7 +149,7 @@ class ProductDB
         $sql = "SELECT * FROM products WHERE id = $id";
         $stmt = $this->conn->query($sql);
         $result = $stmt->fetchAll();
-        $product = new Product($result[0]['name'],$result[0]['price'],$result[0]['toppings']);
+        $product = new Product($result[0]['name'],$result[0]['price'],$result[0]['toppings'],$result[0]['avatar']);
         $product->setId($result[0]['id']);
         return $product;
     }

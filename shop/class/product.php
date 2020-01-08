@@ -5,11 +5,13 @@ class Product
     protected $name;
     protected $price;
     protected $toppings;
+    protected $avatar;
 
-    public function __construct($name, $price, $toppings) {
+    public function __construct($name, $price, $toppings, $avatar) {
         $this->name = $name;
         $this->price = $price;
         $this->toppings = $toppings;
+        $this->avatar = $avatar;
     }
 
 
@@ -57,5 +59,13 @@ class Product
     public function getToppings()
     {
         return $this->toppings;
+    }
+
+    /**
+     * Get the value of avatar
+     */ 
+    public function getAvatar()
+    {
+        return $this->avatar;
     }
 }
